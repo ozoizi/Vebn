@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>🔴 Matrix - Ne Mutlu Türküm Diyene</title>
+<style>
+  body {
+    margin: 0;
+    background: black;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  canvas {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
+  /* Yanıp sönen yazı stili */
+  #merkez-yazi {
+    position: relative;
+    z-index: 2;
+    color: #FF0000; /* Kırmızı */
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 3rem;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 0 0 20px #FF0000, 0 0 30px #8B0000;
+    animation: yanipSon 2s infinite ease-in-out;
+    pointer-events: none; /* Yazının altındaki canvas'a tıklanabilsin diye */
+  }
+
+  @keyframes yanipSon {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.1; transform: scale(1.05); }
+  }
+</style>
+</head>
+<body>
+
+<div id="merkez-yazi">NE MUTLU TÜRKÜM DİYENE!</div>
+<canvas id="matrix"></canvas>
+
+<script>
+  const canvas = document.getElementById("matrix");
+  const ctx = canvas.getContext("2d");
+
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const harfler = "ABCDEFGHIJKLMN0123456789あいうえおアイウエオ";
+  const karakterler = harfler.split("");
+  const fontBoyutu = 13;
+  const sutunSayisi = canvas.width / fontBoyutu;
+  const damlalar = [];
+
+  for (let x = 0; x < sutunSayisi; x++) damlalar[x] = 1;
+
+  function ciz() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#0F0";
+    ctx.font = fontBoyutu + "px monospace";
+
+    for (let i = 0; i < damlalar.length; i++) {
+      const text = karakterler[Math.floor(Math.random() * karakterler.length)];
+      ctx.fillText(text, i * fontBoyutu, damlalar[i] * fontBoyutu);
+
+      if (damlalar[i] * fontBoyutu > canvas.height && Math.random() > 0.975) {
+        damlalar[i] = 0;
+      }
+      damlalar[i]++;
+    }
+  }
+
+  setInterval(ciz, 35);
+
+  window.addEventListener("resize", () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+</script>
+</body>
+</html>
